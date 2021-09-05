@@ -1,6 +1,6 @@
 {% extends 'account/base_card.html' %}
 
-{% load i18n %}
+{% load i18n socialaccount %}
 
 {% block title %}{% trans "Sign In" %}{% endblock %}
 
@@ -9,6 +9,8 @@
 {% endblock %}
 
 {% block card-body %}
+
+    {% get_providers as socialaccount_providers %}
 
     <form method="POST" action="{% url 'account_login' %}">
         {% csrf_token %}
@@ -20,6 +22,12 @@
         </div>
         <button type="submit" class="btn btn-outline-primary">{% trans "Sign In" %}</button>
     </form>
+    {% if socialaccount_providers %}
+    <br>
+    <p>{% blocktrans with site.name as site_name %}or sign in with one of your existing third party accounts:{% endblocktrans %}</p>
+    {% include "socialaccount/provider_list.html" with process="login" %}
+
+    {% endif %}
 
 {% endblock %}
 
